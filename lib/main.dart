@@ -8,19 +8,96 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Calculator'),
+        title: 'Flutter Demo',
+        // theme: ThemeData(
+        //   primarySwatch: Colors.green,
+        //   backgroundColor: Colors.white,
+        //   visualDensity: VisualDensity.adaptivePlatformDensity,
+        // ),
+        home: Main()
+        // home: MyHomePage(title: 'Calculator'),
+        );
+  }
+}
+
+class Main extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+            
+                child: Text('Calculator',   style:TextStyle(fontSize:30, color:Colors.white,fontWeight:FontWeight.bold),),
+             
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyHomePage()),
+                  );
+                }),
+            ElevatedButton(
+                child: Text('Convertor', style:TextStyle(fontSize:30, color:Colors.white,fontWeight:FontWeight.bold)),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Convertor()),
+                  );
+                })
+          ]),
     );
   }
 }
 
+class Convertor extends StatefulWidget {
+  Convertor({Key key}) : super(key: key);
+  @override
+  _ConvertorState createState() => _ConvertorState();
+}
+
+class _ConvertorState extends State<Convertor> {
+  double km = 0.0;
+  double miles = 0.0;
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+        body: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text("1 mile is equal to 0.6213 km ",
+                style: TextStyle(fontSize: 20,color: Colors.red,fontWeight:FontWeight.bold)),
+            Text("Please Enter value in km ", style: TextStyle(fontSize: 25)),
+            TextField(
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(
+        border: OutlineInputBorder()
+        
+        ),
+        
+              style: TextStyle(fontSize: 30,color: Colors.blueAccent,fontWeight:FontWeight.bold),
+              onChanged: (val) {
+                setState(() {
+                  km = double.parse(val);
+                  miles = 0.621371 * double.parse(val);
+                });
+                print(miles);
+                miles.toString();
+                km.toString();
+              },
+            ),
+            Text(" $km==> $miles  miles",
+                style: TextStyle(fontSize: 20,color: Colors.red,fontWeight:FontWeight.bold))
+          ]),
+    ));
+  }
+}
+
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
+  // MyHomePage({Key key, this.title}) : super(key: key);
+  // final String title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -29,16 +106,16 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String output = "0";
   String _output = "0";
-    double num1 = 0.0;
-    double num2 = 0.0;
-    String operand = "";
+  double num1 = 0.0;
+  double num2 = 0.0;
+  String operand = "";
   buttonPressed(String buttonText) {
     print(buttonText);
     if (buttonText == "CLEAR") {
-     _output = "0";
-     num1 = 0.0;
-     num2 = 0.0;
-     operand = "";
+      _output = "0";
+      num1 = 0.0;
+      num2 = 0.0;
+      operand = "";
     } else if (buttonText == "+" ||
         buttonText == "-" ||
         buttonText == "/" ||
@@ -93,8 +170,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
-        ),
+            // title: Text(widget.title),
+            ),
         body: new Container(
             child: new Column(children: <Widget>[
           new Container(
