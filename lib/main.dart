@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(MyApp());
@@ -7,14 +9,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Flutter Demo',
-        // theme: ThemeData(
-        //   primarySwatch: Colors.green,
-        //   backgroundColor: Colors.white,
-        //   visualDensity: VisualDensity.adaptivePlatformDensity,
-        // ),
-        home: Main()
+    return MaterialApp(title: 'Flutter Demo', home: Main()
         // home: MyHomePage(title: 'Calculator'),
         );
   }
@@ -28,9 +23,13 @@ class Main extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ElevatedButton(
-            
-                child: Text('Calculator',   style:TextStyle(fontSize:30, color:Colors.white,fontWeight:FontWeight.bold),),
-             
+                child: Text(
+                  'Calculator',
+                  style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -38,7 +37,11 @@ class Main extends StatelessWidget {
                   );
                 }),
             ElevatedButton(
-                child: Text('Convertor', style:TextStyle(fontSize:30, color:Colors.white,fontWeight:FontWeight.bold)),
+                child: Text('Convertor',
+                    style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold)),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -47,6 +50,52 @@ class Main extends StatelessWidget {
                 })
           ]),
     );
+  }
+}
+
+class Previous extends StatefulWidget {
+  Previous({Key key}) : super(key: key);
+  @override
+  _PrevCalculation createState() => _PrevCalculation();
+}
+
+class _PrevCalculation extends State<Previous> {
+  String equation = "";
+  String timeStamp = "";
+  Future<String> getStringValuesSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      equation = prefs.getString('equation');
+      timeStamp = prefs.getString('timestamp');
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getStringValuesSF();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+        appBar: AppBar(
+          title: Text("Previous calculation"),
+        ),
+        body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    width: 200.0,
+                    height: 300.0,
+                    child: const Card(child: Text('Hello World!')),
+                  ),
+                  Text("equation : $equation", style: TextStyle(fontSize: 25)),
+                  Text("timeStamp : $timeStamp",
+                      style: TextStyle(fontSize: 25)),
+                ])));
   }
 }
 
@@ -62,36 +111,45 @@ class _ConvertorState extends State<Convertor> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text("1 mile is equal to 0.6213 km ",
-                style: TextStyle(fontSize: 20,color: Colors.red,fontWeight:FontWeight.bold)),
-            Text("Please Enter value in km ", style: TextStyle(fontSize: 25)),
-            TextField(
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(
-        border: OutlineInputBorder()
-        
-        ),
-        
-              style: TextStyle(fontSize: 30,color: Colors.blueAccent,fontWeight:FontWeight.bold),
-              onChanged: (val) {
-                setState(() {
-                  km = double.parse(val);
-                  miles = 0.621371 * double.parse(val);
-                });
-                print(miles);
-                miles.toString();
-                km.toString();
-              },
+        appBar: AppBar(
+            // title: Text(widget.title),
             ),
-            Text(" $km==> $miles  miles",
-                style: TextStyle(fontSize: 20,color: Colors.red,fontWeight:FontWeight.bold))
-          ]),
-    ));
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text("1 mile is equal to 0.6213 km ",
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold)),
+                Text("Please Enter value in km ",
+                    style: TextStyle(fontSize: 25)),
+                TextField(
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  decoration: InputDecoration(border: OutlineInputBorder()),
+                  style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.blueAccent,
+                      fontWeight: FontWeight.bold),
+                  onChanged: (val) {
+                    setState(() {
+                      km = double.parse(val);
+                      miles = 0.621371 * double.parse(val);
+                    });
+                    print(miles);
+                    miles.toString();
+                    km.toString();
+                  },
+                ),
+                Text(" $km==> $miles  miles",
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold))
+              ]),
+        ));
   }
 }
 
@@ -105,11 +163,23 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String output = "0";
+  String equation = "0";
   String _output = "0";
   double num1 = 0.0;
   double num2 = 0.0;
   String operand = "";
-  buttonPressed(String buttonText) {
+
+  addStringToSF(value) async {
+    var now = DateTime.now();
+    var date = DateFormat.yMMMd().format(now);
+    var time = DateFormat('hh:mm').format(DateTime.now());
+    print("$date $time");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('equation', value);
+    prefs.setString('timestamp', "$date $time");
+  }
+
+  buttonPressed(String buttonText) async {
     print(buttonText);
     if (buttonText == "CLEAR") {
       _output = "0";
@@ -144,6 +214,8 @@ class _MyHomePageState extends State<MyHomePage> {
       if (operand == "/") {
         _output = (num1 / num2).toString();
       }
+      await addStringToSF("$num1 +$num2 =$_output");
+
       num1 = 0.0;
       num2 = 0.0;
       operand = "";
@@ -151,6 +223,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _output = _output + buttonText;
     }
     print(_output);
+
     setState(() {
       output = double.parse(_output).toStringAsFixed(2);
     });
@@ -170,10 +243,22 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            // title: Text(widget.title),
-            ),
+          title: Text("Calculator"),
+        ),
         body: new Container(
             child: new Column(children: <Widget>[
+          ElevatedButton(
+              child: Text('Previous Calculation',
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold)),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Previous()),
+                );
+              }),
           new Container(
             alignment: Alignment.centerRight,
             padding: EdgeInsets.symmetric(vertical: 24.0, horizontal: 12.0),
