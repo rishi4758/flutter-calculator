@@ -87,11 +87,6 @@ class _PrevCalculation extends State<Previous> {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(
-                    width: 200.0,
-                    height: 300.0,
-                    child: const Card(child: Text('Hello World!')),
-                  ),
                   Text("equation : $equation", style: TextStyle(fontSize: 25)),
                   Text("timeStamp : $timeStamp",
                       style: TextStyle(fontSize: 25)),
