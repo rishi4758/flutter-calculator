@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "925534921362",
+    "project_id": "addfirebase-ebfc4",
+    "storage_bucket": "addfirebase-ebfc4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:925534921362:android:d8112d36dfd05971863c4b",
+        "android_client_info": {
+          "package_name": "com.example.calculator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "925534921362-ejlnf5t3o3k77u6bvl3divcpqk1m1v9o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPPS-LCkNrvu4TwlCkBBby_0ym1U5B2UY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "925534921362-ejlnf5t3o3k77u6bvl3divcpqk1m1v9o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
